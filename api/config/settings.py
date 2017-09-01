@@ -33,7 +33,7 @@ except FileNotFoundError:
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('DJANGO_SECRET_KEY')
+SECRET_KEY = env('DJANGO_SECRET_KEY', default='insecure-key-is-bad')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool('DEBUG', default=False)
@@ -147,9 +147,9 @@ USE_TZ = True
 STATIC_URL = '/static/'
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
-AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME')
+AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID', default='')
+AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY', default='')
+AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME', default='')
 AWS_DEFAULT_ACL = 'public-read'
 AWS_AUTO_CREATE_BUCKET = True
 
@@ -161,7 +161,7 @@ RAVEN_CONFIG = {
 
 # CACHE
 CACHES = {
-    "default": env.cache('REDIS_URL')
+    "default": env.cache('REDIS_URL', default=None)
 }
 
 # CELERY CONFIGS
@@ -183,13 +183,14 @@ CORS_ORIGIN_ALLOW_ALL = True
 
 
 # FIREBASE
-FIREBASE_PROJECT_ID = env('FIREBASE_PROJECT_ID')
+FIREBASE_PROJECT_ID = env('FIREBASE_PROJECT_ID', default='')
 
 FIREBASE_CONFIG = {
-    "apiKey": env('FIREBASE_API_KEY'),
-    "authDomain": env('FIREBASE_AUTH_DOMAIN'),
-    "databaseURL": env('FIREBASE_DB_URL'),
-    "storageBucket": env('FIREBASE_STORAGE_BUCKET'),
-    "serviceAccount": env('FIREBASE_SVC_KEY'),
+    "apiKey": env('FIREBASE_API_KEY', default=''),
+    "authDomain": env('FIREBASE_AUTH_DOMAIN', default=''),
+    "databaseURL": env('FIREBASE_DB_URL', default=''),
+    "storageBucket": env('FIREBASE_STORAGE_BUCKET', default=''),
+    "serviceAccount": env('FIREBASE_SVC_KEY', default=''),
 }
 
+FIREBASE_ENABLED = env.bool('FIREBASE_ENABLED', default=True)
