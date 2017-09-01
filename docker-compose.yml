@@ -1,0 +1,59 @@
+version: '2'
+services:
+  db:
+    image: mdillon/postgis:9.6
+#     build:
+#       context: .
+#       dockerfile: db.Dockerfile
+    environment:
+      - POSTGRES_PASSWORD=dray
+      - POSTGRES_DB=parade_db
+      - PGDATA=/var/lib/postgresql/data/pgdata/
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./.tmp/pgdata/:/var/lib/postgresql/data/pgdata/
+  api:
+    command: ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+    build:
+      context: .
+      dockerfile: dev.Dockerfile
+    volumes:
+      - .:/usr/src/app/
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - rabbitmq
+      - redis
+    environment:
+      - DATABASE_URL=postgres://postgres:dray@db:5432/parade_db
+      - CELERY_BROKER_URL=amqp://admin:password@rabbitmq:5672//
+      - REDIS_URL=rediscache://redis:6379/1?client_class=django_redis.client.DefaultClient
+  celery:
+    command: ["celery", "-A", "config", "worker", "-B"]  # -B includes beat -- only can run one worker node
+    build:
+      context: .
+      dockerfile: dev.Dockerfile
+    volumes:
+      - .:/usr/src/app/
+    depends_on:
+      - db
+      - rabbitmq
+      - redis
+    environment:
+      - DATABASE_URL=postgres://postgres:dray@db:5432/parade_db
+      - CELERY_BROKER_URL=amqp://admin:password@rabbitmq:5672//
+      - REDIS_URL=rediscache://redis:6379/1?client_class=django_redis.client.DefaultClient
+  rabbitmq:
+    image: tutum/rabbitmq
+    environment:
+      - RABBITMQ_PASS=password
+    ports:
+      - "5672:5672"  # we forward this port because it's useful for debugging
+      - "15672:15672"  # here, we can access rabbitmq management plugin
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+

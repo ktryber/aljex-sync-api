@@ -1,0 +1,15 @@
+*.map
+*.pyc
+*.sqlite3
+.sass-cache
+.tmp/
+__pycache__
+deploy/envs/
+deploy/rc/compiled/
+deploy/secrets/
+node_modules
+npm-debug.log
+secrets/
+celerybeat.pid
+.idea
+celerybeat-schedule

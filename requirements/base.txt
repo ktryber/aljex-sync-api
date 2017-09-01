@@ -1,0 +1,15 @@
+boto3==1.4.4
+celery==4.0.2
+dateparser==0.6.0
+Django==1.11.4
+djangorestframework==3.6.2
+django-environ==0.4.1
+django-cors-headers==2.0.2
+django-redis==4.8.0
+django-storages==1.6.3
+lxml==3.8.0
+psycopg2==2.7.1
+requests==2.13.0
+redis==2.10.5
+raven==6.1.0
+firebase-admin==2.1.0
