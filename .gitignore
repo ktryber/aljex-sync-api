@@ -13,3 +13,4 @@ secrets/
 celerybeat.pid
 .idea
 celerybeat-schedule
+.DS_Store
